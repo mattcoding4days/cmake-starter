@@ -38,15 +38,15 @@ set_project_warnings(project_warnings)
 #
 # NOTE: Set our source and include directory variables for use through the build
 #
-set(SOURCE_DIR "${PROJECT_SOURCE_DIR}/src")
-set(TEST_SOURCE_DIR "${PROJECT_SOURCE_DIR}/tests")
-set(EXAMPLES_SOURCE_DIR "${PROJECT_SOURCE_DIR}/examples")
-set(INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include")
+set(STARTER_SOURCE_DIR "${PROJECT_SOURCE_DIR}/src")
+set(STARTER_TEST_SOURCE_DIR "${PROJECT_SOURCE_DIR}/tests")
+set(STARTER_EXAMPLES_SOURCE_DIR "${PROJECT_SOURCE_DIR}/examples")
+set(STARTER_INCLUDE_DIR "${PROJECT_SOURCE_DIR}/include")
 
 #
 # NOTE: Prevent in source builds (can't build in src/ or in project root)
 #
-if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR OR PROJECT_BINARY_DIR STREQUAL SOURCE_DIR)
+if(PROJECT_SOURCE_DIR STREQUAL PROJECT_BINARY_DIR OR PROJECT_BINARY_DIR STREQUAL STARTER_SOURCE_DIR)
   print(
     FATAL_ERROR
     "In source builds are not allowed. Please make a new directory (called a build directory) and run CMake from there."
@@ -67,8 +67,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -pedantic -fPIC")
 
 #
 # NOTE: This is where 3rd party libraries should be installed via the light weight CPM dependancy
-# management system. The CPM wiki is here:
-# https://github.com/cpm-cmake/CPM.cmake/wiki/More-Snippets
+# management system. The CPM wiki is here: https://github.com/cpm-cmake/CPM.cmake/wiki/More-Snippets
 #
 CPMAddPackage(
   Name Catch2
@@ -82,56 +81,47 @@ else()
 endif()
 
 CPMAddPackage(
-  NAME CLI11
-  GITHUB_REPOSITORY CLIUtils/CLI11
-  VERSION 2.1.2
+  NAME cpr
+  GIT_REPOSITORY https://github.com/whoshuu/cpr.git
+  GIT_TAG f4622efcb59d84071ae11404ae61bd821c1c344b
+  OPTIONS "CPR_BUILD_TESTS OFF"
 )
-if(CLI11_ADDED)
-  print(STATUS "CLI11 configured correctly")
+if(cpr_ADDED)
+  print(STATUS "cpr configured correctly")
 else()
-  print(WARNING "CLI11 was not configured properly")
-endif()
-
-CPMAddPackage(
-  NAME fmt
-  GITHUB_REPOSITORY fmtlib/fmt
-  GIT_TAG 8.0.1
-)
-if(fmt_ADDED)
-  print(STATUS "fmt configured correctly")
-else()
-  print(WARNING "fmt was not configured properly")
+  print(WARNING "cpr was not configured properly")
 endif()
 
 #
 # NOTE: add additional project options
 #
-option(ENABLE_DEBUG "Building Debug version" OFF)
+option(STARTER_DEBUG "Building Debug version" OFF)
 option(ENABLE_PCH "Enable Precompiled Headers" ON)
-option(ENABLE_TESTING "Enable Test builds" OFF)
-option(ENABLE_EXAMPLES "Enable example builds" OFF)
+option(STARTER_TESTING "Enable Test builds" OFF)
+option(STARTER_EXAMPLES "Enable example builds" OFF)
 
 #
 # NOTE: Build defaults to a release optimized build, cmake -DENABLE_DEBUG=ON will build debug
 #
-if(ENABLE_DEBUG)
-  print(STATUS "Building ${PROJECT_NAME}-${PROJECT_VERSION} [DEBUG]")
+if(STARTER_DEBUG)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -g")
 else()
-  print(STATUS "Building ${PROJECT_NAME}-${PROJECT_VERSION} [RELEASE]")
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O3")
 endif()
 
 #
 # NOTE: Output build param information
 #
-print(STATUS "CMAKE_CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
+print(STATUS "Building ${PROJECT_NAME}-${PROJECT_VERSION} [${CMAKE_BUILD_TYPE}]")
+print(STATUS "Building with CXX_FLAGS: ${CMAKE_CXX_FLAGS}")
 
 #
 # HACK: glob src files and header files (some people may not like this)
 #
-file(GLOB_RECURSE GLOBBED_HEADERS CONFIGURE_DEPENDS "${INCLUDE_DIR}/${PROJECT_NAME}/*.hpp")
-file(GLOB_RECURSE GLOBBED_SOURCES CONFIGURE_DEPENDS "${SOURCE_DIR}/*.cpp")
+file(GLOB_RECURSE STARTER_GLOBBED_HEADERS CONFIGURE_DEPENDS
+     "${STARTER_INCLUDE_DIR}/${PROJECT_NAME}/*.hpp"
+)
+file(GLOB_RECURSE STARTER_GLOBBED_SOURCES CONFIGURE_DEPENDS "${STARTER_SOURCE_DIR}/*.cpp")
 
 #
 # NOTE: This sets a global PCH parameter, each project will build its own PCH, which is a good idea
@@ -144,7 +134,7 @@ endif()
 #
 # NOTE: Build tests with catch2
 #
-if(ENABLE_TESTING)
+if(STARTER_TESTING)
   enable_testing()
   print(STATUS "Tests Enabled")
   add_subdirectory("tests")
@@ -153,21 +143,26 @@ endif()
 #
 # NOTE: Build project examples, mostly useful for shared/static libraries
 #
-if(ENABLE_EXAMPLES)
+if(STARTER_EXAMPLES)
   print(STATUS "Examples Enabled")
-  # you would want to build each example as one executable, so no glob here
-  set(EXAMPLE_BINARY_ONE "example-1")
-  add_executable(
-    ${EXAMPLE_BINARY_ONE} ${EXAMPLES_SOURCE_DIR}/starter_example.cpp ${SOURCE_DIR}/addition.cpp
-  )
-  target_include_directories(${EXAMPLE_BINARY_ONE} PUBLIC ${INCLUDE_DIR})
-  target_link_libraries(${EXAMPLE_BINARY_ONE} PRIVATE stdc++fs)
+  add_subdirectory("examples")
 endif()
 
-print(STATUS "Building main executable")
-set(BINARY "${PROJECT_NAME}-client")
-add_executable(${BINARY} ${GLOBBED_SOURCES})
-# NOTE: Add our external include directory => include/starter
-target_include_directories(${BINARY} PUBLIC ${INCLUDE_DIR})
-# NOTE: Link 3rd party libraries with the executable here
-target_link_libraries(${BINARY} PRIVATE stdc++fs  CLI11::CLI11 fmt::fmt)
+#
+# NOTE: declare libraries here all source should be placed into a single library, (whether they be
+# shared or static)
+#
+add_library(${PROJECT_NAME} SHARED ${STARTER_GLOBBED_HEADERS} ${STARTER_GLOBBED_SOURCES})
+target_include_directories(${PROJECT_NAME} PUBLIC ${STARTER_INCLUDE_DIR})
+target_link_libraries(${PROJECT_NAME} PRIVATE stdc++fs cpr::cpr)
+
+#
+# NOTE: Install all shared libraries
+#
+install(TARGETS ${PROJECT_NAME} LIBRARY DESTINATION lib)
+install(DIRECTORY "${STARTER_INCLUDE_DIR}/" DESTINATION include)
+
+set_target_properties(
+  ${PROJECT_NAME} PROPERTIES VERSION ${${PROJECT_NAME}_VERSION} SOVERSION
+                                                                ${${PROJECT_NAME}_VERSION_MAJOR}
+)

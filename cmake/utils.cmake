@@ -18,15 +18,15 @@ function(get_version)
   endif()
   set(ver_patch ${CMAKE_MATCH_1})
 
-  set(STARTER_VERSION_MAJOR
+  set(STARTER_VMAJOR
       ${ver_major}
       PARENT_SCOPE
   )
-  set(STARTER_VERSION_MINOR
+  set(STARTER_VMINOR
       ${ver_minor}
       PARENT_SCOPE
   )
-  set(STARTER_VERSION_PATCH
+  set(STARTER_VPATCH
       ${ver_patch}
       PARENT_SCOPE
   )
