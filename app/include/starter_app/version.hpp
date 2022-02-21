@@ -1,8 +1,8 @@
-#ifndef STARTER_CORE_VERSION_HPP
-#define STARTER_CORE_VERSION_HPP
+#ifndef STARTER_APP_VERSION_HPP
+#define STARTER_APP_VERSION_HPP
 
 /**
- * @file starter_core/version.hpp
+ * @file starter_app/version.hpp
  * @author Matt Williams (matt.k.williams.com)
  * @brief Adds version support for project, used by Cmake
  * @date 2021-11-19
@@ -14,7 +14,7 @@
 #define VMINOR 1
 #define VPATCH 0
 
-namespace starter::core {
+namespace starter::app {
 /**
  * @brief return the version in string format
  *
@@ -25,6 +25,6 @@ namespace starter::core {
   version_string += "." + std::to_string(VMINOR) + "." + std::to_string(VPATCH);
   return version_string;
 }
-}  // namespace starter::core
+}  // namespace starter::app
 
 #endif

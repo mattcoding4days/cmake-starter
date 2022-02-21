@@ -1,13 +1,30 @@
 include(CTest)
 
-file(GLOB_RECURSE CORE_GLOBBED_TESTS CONFIGURE_DEPENDS "${CORE_TEST_SOURCE_DIR}/*.cpp")
+file(
+  GLOB_RECURSE
+  CORE_GLOBBED_TESTS
+  CONFIGURE_DEPENDS
+  "${CORE_TEST_SOURCE_DIR}/*.cpp")
 
-add_library(catch_main STATIC catch_main.cpp)
-target_link_libraries(catch_main PUBLIC Catch2::Catch2)
-target_link_libraries(catch_main PRIVATE project_options)
+#
+# NOTE: Set up Catch2 with a custom main function to act as a driving fixture for tests
+#
+set(PACKAGE_CATCH_MAIN "${PACKAGE_NAME}_catch_main")
+add_library(${PACKAGE_CATCH_MAIN} STATIC catch_main.cpp)
+target_link_libraries(${PACKAGE_CATCH_MAIN} PUBLIC Catch2::Catch2)
+target_link_libraries(${PACKAGE_CATCH_MAIN} PRIVATE project_options)
 
-add_executable(unittests ${CORE_GLOBBED_TESTS})
-target_include_directories(unittests PUBLIC ${CORE_INCLUDE_DIR})
-target_link_libraries(unittests PRIVATE project_options catch_main Catch2::Catch2)
+#
+# NOTE: Set up the executable and link all necessary files
+#
+set(PACKAGE_UNIT_TEST_NAME "${PACKAGE_NAME}_unittests")
+add_executable(${PACKAGE_UNIT_TEST_NAME} ${CORE_GLOBBED_TESTS})
+target_include_directories(${PACKAGE_UNIT_TEST_NAME} PUBLIC ${CORE_INCLUDE_DIR})
+target_link_libraries(
+  ${PACKAGE_UNIT_TEST_NAME}
+  PRIVATE project_options
+          project_warnings
+          ${PACKAGE_CATCH_MAIN}
+          Catch2::Catch2)
 
-add_test(NAME "${PACKAGE_NAME}_test_suite" COMMAND unittests)
+add_test(NAME "${PACKAGE_NAME}_test_suite" COMMAND ${PACKAGE_UNIT_TEST_NAME})

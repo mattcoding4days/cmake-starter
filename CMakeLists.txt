@@ -25,7 +25,6 @@ project(
   HOMEPAGE_URL "https://github.com/mattcoding4days/cmake-starter-lib"
   LANGUAGES CXX C)
 
-
 #
 # NOTE: Link this 'library' to set the c++ standard / compile-time options requested
 #
@@ -48,7 +47,7 @@ set_project_warnings(project_warnings)
 #
 option(STARTER_ENABLE_PCH "Enable Precompiled Headers" ON)
 option(STARTER_BUILD_CORE "Build the core shared library" ON)
-# option(STARTER_BUILD_APP  "Build the application" ON)
+option(STARTER_BUILD_APP  "Build the application" ON)
 
 #
 # NOTE: This sets a global PCH parameter, each project will build its own PCH, which is a good idea
@@ -87,9 +86,9 @@ if(STARTER_BUILD_CORE)
   add_subdirectory("core")
 endif()
 
-# if(STARTER_BUILD_APP)
-# add_subdirectory("app")
-# endif()
+if(STARTER_BUILD_APP)
+  add_subdirectory("app")
+endif()
 
 #
 # NOTE: bring in standard cmake includes
