@@ -14,15 +14,13 @@ set(PACKAGE_VERSION ${${PACKAGE_NAME}_VERSION})
 # NOTE: Set our source and include directory variables for use through the build
 #
 set(APP_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/src")
-set(APP_TEST_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests")
-set(APP_EXAMPLES_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/examples")
 set(APP_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
+set(APP_TEST_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests")
 
 #
 # NOTE: add additional project options
 #
 option(STARTER_BUILD_APP_TESTING "Enable Test builds" ON)
-option(STARTER_BUILD_APP_EXAMPLES "Enable example builds" ON)
 
 #
 # NOTE: Prevent in source builds (can't build in src/ or in project root)
@@ -68,19 +66,18 @@ if(STARTER_BUILD_APP_TESTING)
 endif()
 
 #
-# HACK: glob src files and header files (some people may not like this)
+# NOTE: Manually add all header files
 #
-file(
-  GLOB_RECURSE
-  APP_GLOBBED_HEADERS
-  CONFIGURE_DEPENDS
-  "${APP_INCLUDE_DIR}/${PACKAGE_NAME}/*.hpp")
+set(APP_HEADERSS
+    "${APP_INCLUDE_DIR}/version.hpp"
+    )
 
-file(
-  GLOB_RECURSE
-  APP_GLOBBED_SOURCES
-  CONFIGURE_DEPENDS
-  "${APP_SOURCE_DIR}/*.cpp")
+#
+# NOTE: Manually add source files
+#
+set(APP_SOURCES
+    "${APP_SOURCE_DIR}/main.cpp"
+    )
 
 #
 # NOTE: Build tests with catch2
@@ -92,21 +89,6 @@ if(STARTER_BUILD_APP_TESTING)
 endif()
 
 #
-# NOTE: Build project examples, mostly useful for shared/static libraries
+# NOTE: Add the src/ subdirectory to finish building the executable
 #
-if(STARTER_BUILD_APP_EXAMPLES)
-  print(STATUS "${PACKAGE_NAME} Examples enabled")
-  add_subdirectory("examples")
-endif()
-
-#
-# NOTE: Output build param information
-#
-print(STATUS "Building ${PACKAGE_NAME}_v${PACKAGE_VERSION} [${CMAKE_BUILD_TYPE}]")
-
-#
-# NOTE: Add the executable, target all directories and link the libraries
-#
-add_executable(${PACKAGE_NAME} ${APP_GLOBBED_SOURCES})
-target_include_directories(${PACKAGE_NAME} PUBLIC ${APP_INCLUDE_DIR})
-target_link_libraries(${PACKAGE_NAME} PRIVATE project_options project_warnings ${STARTER_CORE_LIB})
+add_subdirectory("src")
