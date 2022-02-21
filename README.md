@@ -11,8 +11,8 @@
 
 ## About 
 
-> A lightweight Cmake project meant for a binary application (not a shared library), tests with catch2 are
-> configured, CPM is the package manager of choice, docopt and fmtlib are installed and linked as libraries
+> A lightweight Cmake project that contains a shared library found in the `core` directory
+> and a binary application meant to consume the shared library found in the `app` directory
 
 ## Docker
 
