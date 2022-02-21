@@ -8,6 +8,24 @@ RUN apt-get update && \
     apt-get -y install clangd cmake build-essential python3-pip vim git libssl-dev && \
     pip3 install clang-format cmake-format 
 
-COPY . /app
+# Copy the files to the image
+COPY cmake/ /starter/cmake
+COPY core/ /starter/core
+COPY app/ /starter/app
+COPY CMakeLists.txt /starter/CMakeLists.txt
 
-RUN cd app && cmake -D STARTER_TESTING=ON -B build && cmake --build build && cd build && ctest --verbose
+# Build Entire project ( No tests, No Examples)
+RUN cd starter && cmake -B build \
+                       -D STARTER_BUILD_CORE=ON \
+                       -D STARTER_BUILD_CORE_TESTING=ON \
+                       -D STARTER_BUILD_CORE_EXAMPLES=ON \
+                       # \
+                       -D STARTER_BUILD_APP=ON \
+                       -D STARTER_BUILD_APP_TESTING=ON \
+                       -D STARTER_BUILD_APP_EXAMPLES=ON \
+                       # \
+                       # \ -C to specify path for make. \
+                       # \ -j to specify number of jobs (processors) to run simultaneously. \
+                       # \ nproc is the number of processors on the system. \
+                       && make -C build -j$(nproc)
+

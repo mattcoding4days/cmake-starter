@@ -4,7 +4,7 @@
 cmake_minimum_required(VERSION 3.10...3.22)
 
 #
-# Set the C++ standard
+# NOTE: Set the C++ standard
 #
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
@@ -14,7 +14,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED True)
 #
 include(cmake/utils.cmake)
 
-# Set project name, and language.
+#
+# NOTE: Set project name, and language.
 #
 # Sub-project versions are defined in their respective `CMakeLists.txt` files, by calling
 # `get_version()`.
@@ -47,7 +48,7 @@ set_project_warnings(project_warnings)
 #
 option(STARTER_ENABLE_PCH "Enable Precompiled Headers" ON)
 option(STARTER_BUILD_CORE "Build the core shared library" ON)
-option(STARTER_BUILD_APP  "Build the application" ON)
+option(STARTER_BUILD_APP "Build the application" ON)
 
 #
 # NOTE: This sets a global PCH parameter, each project will build its own PCH, which is a good idea
