@@ -5,7 +5,7 @@ FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && \
-    apt-get -y install clangd cmake build-essential python3-pip vim git libssl-dev && \
+    apt-get -y install clangd cmake build-essential python3-pip vim git && \
     pip3 install clang-format cmake-format 
 
 # Copy the files to the image
@@ -29,3 +29,8 @@ RUN cd starter && cmake -B build \
                        # \ nproc is the number of processors on the system. \
                        && make -C build -j$(nproc)
 
+
+# Run tests. If you did not build a project,
+# make sure to comment out the tests for that project
+RUN cd starter/build/core && ctest -VV
+RUN cd starter/build/core && ctest -VV
