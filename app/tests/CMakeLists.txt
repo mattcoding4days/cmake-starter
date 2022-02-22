@@ -1,10 +1,9 @@
 include(CTest)
 
-file(
-  GLOB_RECURSE
-  APP_GLOBBED_TESTS
-  CONFIGURE_DEPENDS
-  "${APP_TEST_SOURCE_DIR}/*.cpp")
+#
+# NOTE: Add all test sources files here
+#
+set(APP_TEST_SOURCES "${APP_TEST_SOURCE_DIR}/catch_main.cpp" "${APP_TEST_SOURCE_DIR}/constexpr_tests.cpp")
 
 #
 # NOTE: Set up Catch2 with a custom main function to act as a driving fixture for tests
@@ -18,13 +17,13 @@ target_link_libraries(${PACKAGE_CATCH_MAIN} PRIVATE project_options)
 # NOTE: Set up the executable and link all necessary files
 #
 set(PACKAGE_UNIT_TEST_NAME "${PACKAGE_NAME}_unittests")
-add_executable(${PACKAGE_UNIT_TEST_NAME} ${APP_GLOBBED_TESTS})
+add_executable(${PACKAGE_UNIT_TEST_NAME} ${APP_TEST_SOURCES})
 target_include_directories(${PACKAGE_UNIT_TEST_NAME} PUBLIC ${APP_INCLUDE_DIR})
 target_link_libraries(
   ${PACKAGE_UNIT_TEST_NAME}
   PRIVATE project_options
           project_warnings
-          ${PACKAGE_CATCH_MAIN} 
+          ${PACKAGE_CATCH_MAIN}
           Catch2::Catch2)
 
 add_test(NAME "${PACKAGE_NAME}_test_suite" COMMAND ${PACKAGE_UNIT_TEST_NAME})
