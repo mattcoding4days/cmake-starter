@@ -33,35 +33,37 @@ if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_CURRENT_BINARY_DIR OR CMAKE_CURRENT_B
 endif()
 
 #
-# NOTE: bring in standard cmake includes
-#
-# include(CMakeDependentOption) include(GNUInstallDirs)
-
-#
 # NOTE: This is where 3rd party libraries should be installed via the light weight CPM dependancy
 # management system. The CPM wiki is here: https://github.com/cpm-cmake/CPM.cmake/wiki/More-Snippets
 #
+# NOTE: googletest version >= 3.11.0 now has google mock, and google benchmark libraries built into it,
+# so we get 3 for 1
+#
 # NOTE: Using `CPMFindPackage()` to install package only if it is not already installed.
+#
 if(STARTER_BUILD_APP_TESTING)
-  cpmfindpackage(
+  cpmaddpackage(
     NAME
-    Catch2
+    googletest
     GITHUB_REPOSITORY
-    catchorg/Catch2
+    google/googletest
+    GIT_TAG
+    release-1.11.0
     VERSION
-    2.13.7)
-  if(Catch2_ADDED)
-    # The current `CMakeLists.txt` file installed the Catch2 package
-    print(STATUS "Catch2 configured correctly")
-    set(Catch2_Installed
+    1.11.0
+    OPTIONS
+    "BUILD_GMOCK ON"
+    "INSTALL_GTEST OFF"
+    "gtest_force_shared_crt ON")
+  if(googletest_ADDED)
+    print(STATUS "gtest configured correctly")
+    set(googletest_Installed
         ON
         PARENT_SCOPE)
-  elseif(Catch2_Installed)
-    # The package was previously installed to the project
-    print(STATUS "Catch2 already installed")
+  elseif(googletest_Installed)
+    print(STATUS "gtest already installed")
   else()
-    # The package was not succesfully installed to the project
-    print(WARNING "Catch2 was not configured properly")
+    print(WARNING "gtest was not configured properly")
   endif()
 endif()
 

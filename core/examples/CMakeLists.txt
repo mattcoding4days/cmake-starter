@@ -1,7 +1,7 @@
 #
 # NOTE: add the executables
 #
-set(EXAMPLE_ONE "${PACKAGE_NAME}_example_one")
+set(EXAMPLE_ONE "${PACKAGE_NAME}_example_one.bin")
 
 add_executable(${EXAMPLE_ONE} "${CORE_EXAMPLES_SOURCE_DIR}/core_example.cpp" ${CORE_SOURCE_DIR}/add.cpp)
 
