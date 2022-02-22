@@ -66,18 +66,9 @@ if(STARTER_BUILD_APP_TESTING)
 endif()
 
 #
-# NOTE: Manually add all header files
+# NOTE: Add the src/ subdirectory to finish building the executable
 #
-set(APP_HEADERSS
-    "${APP_INCLUDE_DIR}/version.hpp"
-    )
-
-#
-# NOTE: Manually add source files
-#
-set(APP_SOURCES
-    "${APP_SOURCE_DIR}/main.cpp"
-    )
+add_subdirectory("src")
 
 #
 # NOTE: Build tests with catch2
@@ -87,8 +78,3 @@ if(STARTER_BUILD_APP_TESTING)
   print(STATUS "${PACKAGE_NAME} -- Tests Enabled")
   add_subdirectory("tests")
 endif()
-
-#
-# NOTE: Add the src/ subdirectory to finish building the executable
-#
-add_subdirectory("src")

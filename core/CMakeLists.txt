@@ -6,8 +6,10 @@ set(PACKAGE_NAME "starter_core")
 #
 get_version()
 
-# Rename `${${PACKAGE_NAME}_VERSION}` variable to `${PACKAGE_VERSION}` for easy reference in the
+#
+# NOTE: Rename `${${PACKAGE_NAME}_VERSION}` variable to `${PACKAGE_VERSION}` for easy reference in the
 # current `CMakeLists.txt` file.
+#
 set(PACKAGE_VERSION ${${PACKAGE_NAME}_VERSION})
 
 #
@@ -18,7 +20,9 @@ set(CORE_TEST_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests")
 set(CORE_EXAMPLES_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/examples")
 set(CORE_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 
+#
 # NOTE: add additional project options
+#
 option(STARTER_BUILD_CORE_TESTING "Enable Test builds" ON)
 option(STARTER_BUILD_CORE_EXAMPLES "Enable example builds" ON)
 
@@ -37,6 +41,7 @@ endif()
 # management system. The CPM wiki is here: https://github.com/cpm-cmake/CPM.cmake/wiki/More-Snippets
 #
 # NOTE: Using `CPMFindPackage()` to install package only if it is not already installed.
+#
 if(STARTER_BUILD_CORE_TESTING)
   cpmfindpackage(
     NAME
@@ -63,18 +68,18 @@ if(STARTER_BUILD_CORE_TESTING)
 endif()
 
 #
-# HACK: glob src files and header files (some people may not like this)
+# NOTE: Add the src directory to complete building the shared library
 #
-file(
-  GLOB_RECURSE
-  CORE_GLOBBED_HEADERS
-  CONFIGURE_DEPENDS
-  "${CORE_INCLUDE_DIR}/${PACKAGE_NAME}/*.hpp")
-file(
-  GLOB_RECURSE
-  CORE_GLOBBED_SOURCES
-  CONFIGURE_DEPENDS
-  "${CORE_SOURCE_DIR}/*.cpp")
+add_subdirectory("src")
+
+#
+# NOTE: Set the name of the library in the top level `CMakeLists.txt` file.
+#
+# This allows us to use `STARTER_CORE_LIB` to link against in the 'app' project
+#
+set(STARTER_CORE_LIB
+    ${PACKAGE_NAME}
+    PARENT_SCOPE)
 
 #
 # NOTE: Build tests with catch2
@@ -92,30 +97,3 @@ if(STARTER_BUILD_CORE_EXAMPLES)
   print(STATUS "${PACKAGE_NAME} -- Examples Enabled")
   add_subdirectory("examples")
 endif()
-
-#
-# NOTE: Output build param information
-#
-print(STATUS "Building ${PACKAGE_NAME}_v${PACKAGE_VERSION} [${CMAKE_BUILD_TYPE}]")
-
-#
-# NOTE: Add core as a interfaced library into our project, as it is header only
-#
-add_library(${PACKAGE_NAME} SHARED ${CORE_GLOBBED_HEADERS} ${CORE_GLOBBED_SOURCES})
-target_include_directories(${PACKAGE_NAME} PUBLIC ${CORE_INCLUDE_DIR})
-target_link_libraries(${PACKAGE_NAME} PRIVATE project_options project_warnings stdc++fs)
-
-#
-# NOTE: Install all shared libraries
-#
-install(TARGETS ${PACKAGE_NAME} LIBRARY DESTINATION lib)
-install(DIRECTORY "${CORE_INCLUDE_DIR}/" DESTINATION include)
-set_target_properties(${PACKAGE_NAME} PROPERTIES VERSION ${${PACKAGE_NAME}_VERSION} SOVERSION ${${PACKAGE_NAME}_VMAJOR})
-
-#
-# NOTE: Set the name of the library in the top level `CMakeLists.txt` file.
-#
-# This allows us to use `STARTER_CORE_LIB` to link against in the 'app' project
-set(STARTER_CORE_LIB
-    ${PACKAGE_NAME}
-    PARENT_SCOPE)

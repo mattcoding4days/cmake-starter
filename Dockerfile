@@ -5,8 +5,7 @@ FROM ubuntu:20.04
 ENV DEBIAN_FRONTEND noninteractive
 
 RUN apt-get update && \
-    apt-get -y install clangd cmake build-essential python3-pip vim git && \
-    pip3 install clang-format cmake-format 
+    apt-get -y install clangd cmake build-essential python3-pip vim git
 
 # Copy the files to the image
 COPY cmake/ /starter/cmake
@@ -22,7 +21,6 @@ RUN cd starter && cmake -B build \
                        # \
                        -D STARTER_BUILD_APP=ON \
                        -D STARTER_BUILD_APP_TESTING=ON \
-                       -D STARTER_BUILD_APP_EXAMPLES=ON \
                        # \
                        # \ -C to specify path for make. \
                        # \ -j to specify number of jobs (processors) to run simultaneously. \
@@ -33,4 +31,6 @@ RUN cd starter && cmake -B build \
 # Run tests. If you did not build a project,
 # make sure to comment out the tests for that project
 RUN cd starter/build/core && ctest -VV
-RUN cd starter/build/core && ctest -VV
+RUN ./starter/build/core/examples/starter_core_example_one
+RUN cd starter/build/app && ctest -VV
+RUN ./starter/build/app/src/starter_app.bin
