@@ -19,7 +19,16 @@
 
 > A lightweight Cmake project that uses CPM as its package manager
 
-## :package: Docker
+1. [CPM -- The missing package manager for CMake](https://github.com/cpm-cmake/CPM.cmake)
+  - CPM was chosen because it is simple to set up, dependency free, and is a simple wrapper around
+    Cmakes FetchContent. Most other package managers like Hunter or Conan are difficult to set up,
+    make ci/cd pipelines even more difficult to set up than they already are, and have depencies.
+    
+2. This templated project has 2 types of projects ready to go by default.
+  - The `core` folder showcases how to set up a shared library in CMake
+  - The `app` folder showcases a standard binary application which consumes the `core` shared library
+
+## :computer: Docker
 
 > This container builds the development environment for Ubuntu 20.04,
 > installs the cmake project, and then runs the tests
@@ -42,4 +51,9 @@ docker container run -it cm:v0.1
 docker container run cm:v0.1
 ```
 
-## :package:
+## :package: 3rd party packages
+1. [gtest](https://github.com/google/googletest)
+  - Googles Unit test framework which also includes a mock library
+  - Why? It compiles way faster than catch2, has a built in mocking framework, and blends nicely
+    with the google benchmark library
+
