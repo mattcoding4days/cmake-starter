@@ -3,7 +3,7 @@
 
 /**
  * @file starter_app/version.hpp
- * @author Matt Williams (matt.k.williams.com)
+ * @author Matt Williams (matt.k.williams@protonmail.com)
  * @brief Adds version support for project, used by Cmake
  * @date 2021-11-19
  */
