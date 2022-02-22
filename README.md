@@ -1,5 +1,9 @@
 <div align="center">
-  <img src="repo_assets/Cmake-Starter.png">
+  <img width="300" height="300" src="repo_assets/Cmake-Starter.png">
+</div>
+
+<br>
+<div align="center">
   <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/mattcoding4days/cmake-starter/Unittests?label=Build%2FUnittests&logo=github&style=flat-square">
   <img alt="GitHub issues" src="https://img.shields.io/github/issues/mattcoding4days/cmake-starter?color=red&label=Issues&logo=github&style=flat-square">
   <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/mattcoding4days/cmake-starter?color=blue&label=Pull%20Requests&logo=github&style=flat-square">
