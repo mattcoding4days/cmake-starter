@@ -3,7 +3,7 @@
 
 /**
  * @file add.hpp
- * @author Matt Williams (matt.k.williams.com)
+ * @author Matt Williams (matt.k.williams@protonmail.com)
  * @date 2021-11-19
  */
 
