@@ -1,5 +1,5 @@
 <div align="center">
-  <img width="1000" height="1000" src="repo_assets/cmake-starter.jpg">
+  <img width="1000" height="200" src="repo_assets/cmake-starter.jpg">
 </div>
 
 <br>
