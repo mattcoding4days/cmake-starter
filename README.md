@@ -1,12 +1,14 @@
 <div align="center">
   <h1>Cmake Starter</h1>
-  <img alt="GitHub Workflow Status (event)" src="https://img.shields.io/github/workflow/status/mattcoding4days/cmake-starter/CMake?label=Unittests%2FBuild&logo=github&style=flat-square">
-  <img alt="GitHub issues" src="https://img.shields.io/github/issues-raw/mattcoding4days/cmake-starter?style=flat-square">
-  <img alt="GitHub" src="https://img.shields.io/github/license/mattcoding4days/cmake-starter?style=flat-square">
-  <img alt="GitHub search hit counter" src="https://img.shields.io/github/search/mattcoding4days/cmake-starter/cmake?style=flat-square">
-  <img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/mattcoding4days/cmake-starter?style=flat-square">
-  <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/mattcoding4days/cmake-starter?color=green&logo=github&logoColor=green&style=flat-square">
-  <img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/mattcoding4days/cmake-starter?color=pink&logo=github&logoColor=pink&style=flat-square">
+  <img alt="GitHub Workflow Status" src="https://img.shields.io/github/workflow/status/mattcoding4days/cmake-starter/Unittests?label=Build%2FUnittests&logo=github&style=flat-square">
+  <img alt="GitHub issues" src="https://img.shields.io/github/issues/mattcoding4days/cmake-starter?color=red&label=Issues&logo=github&style=flat-square">
+  <img alt="GitHub pull requests" src="https://img.shields.io/github/issues-pr/mattcoding4days/cmake-starter?color=blue&label=Pull%20Requests&logo=github&style=flat-square">
+  <img alt="GitHub forks" src="https://img.shields.io/github/forks/mattcoding4days/cmake-starter?label=Forks&logo=github&style=flat-square">
+  <img alt="GitHub Repo stars" src="https://img.shields.io/github/stars/mattcoding4days/cmake-starter?label=Stars&logo=github&style=flat-square">
+  <img alt="GitHub" src="https://img.shields.io/github/license/mattcoding4days/cmake-starter?color=blue&label=License&logo=github&style=flat-square">
+  <img alt="GitHub contributors" src="https://img.shields.io/github/contributors/mattcoding4days/cmake-starter?color=blue&logo=github&style=flat-square">
+  <img alt="Lines of code" src="https://img.shields.io/tokei/lines/github/mattcoding4days/cmake-starter?label=Total%20Lines%20Of%20Code&logo=github&style=flat-square">
+  <img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/mattcoding4days/cmake-starter?label=Repo%20Size&logo=github&style=flat-square">
 </div>
 
 ## About 
