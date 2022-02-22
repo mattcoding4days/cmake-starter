@@ -1,5 +1,3 @@
-#!/bin/env python3
-
 """
 A simple script to create a debian package
 using checkinstall.
