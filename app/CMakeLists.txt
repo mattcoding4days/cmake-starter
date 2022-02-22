@@ -20,7 +20,7 @@ set(APP_TEST_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests")
 #
 # NOTE: add additional project options
 #
-option(STARTER_BUILD_APP_TESTING "Enable Test builds" ON)
+option(STARTER_BUILD_APP_TESTING "Enable Test builds" OFF)
 
 #
 # NOTE: Prevent in source builds (can't build in src/ or in project root)
@@ -65,18 +65,14 @@ if(STARTER_BUILD_APP_TESTING)
   else()
     print(WARNING "gtest was not configured properly")
   endif()
+
+  # add tests
+  enable_testing()
+  print(STATUS "${PACKAGE_NAME} -- Tests Enabled")
+  add_subdirectory("tests")
 endif()
 
 #
 # NOTE: Add the src/ subdirectory to finish building the executable
 #
 add_subdirectory("src")
-
-#
-# NOTE: Build tests with catch2
-#
-if(STARTER_BUILD_APP_TESTING)
-  enable_testing()
-  print(STATUS "${PACKAGE_NAME} -- Tests Enabled")
-  add_subdirectory("tests")
-endif()

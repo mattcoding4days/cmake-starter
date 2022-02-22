@@ -23,8 +23,8 @@ set(CORE_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 #
 # NOTE: add additional project options
 #
-option(STARTER_BUILD_CORE_TESTING "Enable Test builds" ON)
-option(STARTER_BUILD_CORE_EXAMPLES "Enable example builds" ON)
+option(STARTER_BUILD_CORE_TESTING "Enable Test builds" OFF)
+option(STARTER_BUILD_CORE_EXAMPLES "Enable example builds" OFF)
 
 #
 # NOTE: Prevent in source builds (can't build in src/ or in project root)
@@ -69,12 +69,25 @@ if(STARTER_BUILD_CORE_TESTING)
   else()
     print(WARNING "gtest was not configured properly")
   endif()
+
+  # add tests
+  enable_testing()
+  print(STATUS "${PACKAGE_NAME} -- Tests Enabled")
+  add_subdirectory("tests")
 endif()
 
 #
 # NOTE: Add the src directory to complete building the shared library
 #
 add_subdirectory("src")
+
+#
+# NOTE: Build project examples, mostly useful for shared/static libraries
+#
+if(STARTER_BUILD_CORE_EXAMPLES)
+  print(STATUS "${PACKAGE_NAME} -- Examples Enabled")
+  add_subdirectory("examples")
+endif()
 
 #
 # NOTE: Set the name of the library in the top level `CMakeLists.txt` file.
@@ -84,20 +97,3 @@ add_subdirectory("src")
 set(STARTER_CORE_LIB
     ${PACKAGE_NAME}
     PARENT_SCOPE)
-
-#
-# NOTE: Build tests with catch2
-#
-if(STARTER_BUILD_CORE_TESTING)
-  enable_testing()
-  print(STATUS "${PACKAGE_NAME} -- Tests Enabled")
-  add_subdirectory("tests")
-endif()
-
-#
-# NOTE: Build project examples, mostly useful for shared/static libraries
-#
-if(STARTER_BUILD_CORE_EXAMPLES)
-  print(STATUS "${PACKAGE_NAME} -- Examples Enabled")
-  add_subdirectory("examples")
-endif()
