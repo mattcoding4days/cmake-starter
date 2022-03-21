@@ -1,0 +1,18 @@
+#!/bin/python3
+
+import sys
+from cmake_tooling.utils import Log
+
+#
+# NOTE paranoid platform check
+#
+if "linux" not in sys.platform:
+    Log.error(f"{sys.platform}' is currently not supported\n")
+    sys.exit(1)
+
+
+def main():
+    """
+    @desc main function
+    """
+    ...

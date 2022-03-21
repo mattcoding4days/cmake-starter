@@ -1,79 +1,15 @@
 """
-A simple script to create a debian package
-using checkinstall.
-
-Author: Matt Williams
-email: matt@dmgblockchain.com
+Uses checkinstall as a backend to create a debian package.
 """
 
 import argparse
 import os
 import subprocess as sp
-import sys
 from pathlib import Path
-
 import distro
 
-# Paranoid platform check
-if "linux" not in sys.platform:
-    sys.stderr.write(f"{sys.platform}' is currently not supported\n")
-    sys.exit(1)
-
-# check if user is root
-if os.getenv("USER") == "root":
-    sys.stderr.write(
-        "\033[1;31mError\033[0m We humbly request that you do not run this script as root \n"
-    )
-    sys.exit(1)
-
-
-class Log:
-    """
-    A convience wrapper class for formatted colorized output
-    """
-
-    black = "\033[1;30m"
-    red = "\033[1;31m"
-    grn = "\033[1;32m"
-    yellow = "\033[1;33m"
-    blue = "\033[1;34m"
-    purp = "\033[1;35m"
-    cyan = "\033[1;36m"
-    white = "\033[1;37m"
-    reset = "\033[0m"
-
-    @staticmethod
-    def info(msg: str):
-        """
-        Log a green highlighted info msg
-        """
-        sys.stdout.write(
-            f"{Log.grn}[✓]{Log.reset}  {Log.white}{msg}{Log.reset}\n")
-
-    @staticmethod
-    def complete(msg: str):
-        """
-        Log a blue completion message
-        """
-        sys.stdout.write(
-            f"{Log.blue}[✓]{Log.reset}  {Log.white}{msg}{Log.reset}\n")
-
-    @staticmethod
-    def warn(msg: str):
-        """
-        Log a yellow highlighted warning message
-        """
-        sys.stdout.write(
-            f"{Log.yellow}[!]{Log.reset}  {Log.white}{msg}{Log.reset}\n")
-
-    @staticmethod
-    def error(msg: str):
-        """
-        Log an error message then exit the program
-        """
-        sys.stderr.write(
-            f"{Log.red}[x]{Log.reset}  {Log.white}{msg}{Log.reset}\n")
-        sys.exit(1)
+# local package
+from cmake_tooling.utils import Log
 
 
 class Packager:
