@@ -1,3 +1,9 @@
+# pythong stuff
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C++/Cmake stuff
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
