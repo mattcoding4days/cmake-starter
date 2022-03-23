@@ -11,9 +11,10 @@ set(BINARY_NAME "${PACKAGE_NAME}.bin")
 #
 # NOTE: Declare the executable, manually add all source files
 #
-add_executable(${BINARY_NAME}
-    # Add source files
-    "${APP_SOURCE_DIR}/main.cpp")
+add_executable(
+  ${BINARY_NAME}
+  # Add source files
+  "${APP_SOURCE_DIR}/main.cpp")
 
 target_include_directories(${BINARY_NAME} PUBLIC ${APP_INCLUDE_DIR})
 target_link_libraries(${BINARY_NAME} PRIVATE project_options project_warnings ${STARTER_CORE_LIB})

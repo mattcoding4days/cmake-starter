@@ -2,12 +2,12 @@
 Utility module
 Log -- A simple colorized console wrapper
 Shell -- Wrap up common linux shell utillities
-
 """
 
-import sys
-import os
+# standard lib
 import subprocess as sp
+import sys
+
 
 class Log:
     """
@@ -56,19 +56,36 @@ class Log:
         sys.stderr.write(
             f"{Log.red}[x]{Log.reset}  {Log.white}{msg}{Log.reset}\n")
 
+
 class Shell:
     """
     @description: A wrapper around subprocess
     """
 
     def __init__(self):
-        self.__user_shell = str(os.getenv("SHELL"))
+        self.__user_shell: str = self.execute_with_output("command -v bash")
+
+    def execute_with_output(self, command: str) -> str:
+        """
+        @desc get the output from a command
+        @returns the output of a shell command, it will be empty if
+        the command fails
+        """
+        output = ""
+        try:
+            output = sp.run(command, check=False, shell=True,
+                            capture_output=True).stdout.decode().strip('\n')
+        except sp.CalledProcessError as error:
+            Log.error(f"{error}")
+
+        return output
 
     def execute(self, command: str) -> bool:
         """
         @description: Execute a shell command
         @returns: True if the command succeeds, False otherwise
         """
+        Log.info(f"Running: {command}")
         try:
             sp.run(command, check=False, shell=True,
                    executable=self.__user_shell)
@@ -93,4 +110,3 @@ class Shell:
             return False
 
         return True
-

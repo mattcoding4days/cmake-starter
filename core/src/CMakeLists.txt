@@ -6,13 +6,12 @@ print(STATUS "Building ${PACKAGE_NAME}_v${PACKAGE_VERSION} [${CMAKE_BUILD_TYPE}]
 #
 # NOTE: Target core as a shared library
 #
-add_library(${PACKAGE_NAME} SHARED
-    # Add Header files
-    "${CORE_INCLUDE_DIR}/${PACKAGE_NAME}/version.hpp"
-    "${CORE_INCLUDE_DIR}/${PACKAGE_NAME}/add.hpp"
-    # Add Source files
-    "${CORE_SOURCE_DIR}/add.cpp"
-    )
+add_library(
+  ${PACKAGE_NAME} SHARED
+  # Add Header files
+  "${CORE_INCLUDE_DIR}/${PACKAGE_NAME}/version.hpp" "${CORE_INCLUDE_DIR}/${PACKAGE_NAME}/add.hpp"
+  # Add Source files
+  "${CORE_SOURCE_DIR}/add.cpp")
 
 target_include_directories(${PACKAGE_NAME} PUBLIC ${CORE_INCLUDE_DIR})
 target_link_libraries(${PACKAGE_NAME} PRIVATE project_options project_warnings stdc++fs)
