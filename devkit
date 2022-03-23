@@ -28,9 +28,15 @@ def preflight():
     shell = Shell()
     # verify that all the required programs are installed on the system
     for key, value in settings.CMAKE_PROGRAMS.items():
-        if not shell.is_installed(value):
-            raise Exception(
-                f"{value} was not found on the system, please install, or change the value of {key} in the tooling/settings.py file")
+        if isinstance(value, str):
+            if not shell.is_installed(value):
+                raise Exception(
+                    f"{value} was not found on the system, please install, or change the value of {key} in the tooling/settings.py file")
+        else:
+            program_name = value["name"]
+            if not shell.is_installed(program_name):
+                raise Exception(
+                    f"{program_name} was not found on the system, please install, or change the value of {key} in the tooling/settings.py file")
 
 
 def main() -> int:
@@ -61,7 +67,6 @@ def main() -> int:
             if cli.args.gnu:
                 cxx_compiler = settings.CMAKE_PROGRAMS["GNU_CXX_COMPILER"]
                 c_compiler = settings.CMAKE_PROGRAMS["GNU_C_COMPILER"]
-
             compiler = Compiler(cxx_compiler, c_compiler)
             if not compiler.compile():
                 return 1
@@ -73,6 +78,7 @@ def main() -> int:
         Log.error(f"{e}")
         return 1
 
+    Log.complete("Done..")
     return 0
 
 

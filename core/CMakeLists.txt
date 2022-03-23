@@ -23,8 +23,8 @@ set(CORE_INCLUDE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/include")
 #
 # NOTE: add additional project options
 #
-option(STARTER_BUILD_CORE_TESTING "Enable Test builds" OFF)
-option(STARTER_BUILD_CORE_EXAMPLES "Enable example builds" OFF)
+option(STARTER_BUILD_CORE_TESTING "Enable Test builds" ON)
+option(STARTER_BUILD_CORE_EXAMPLES "Enable example builds" ON)
 
 #
 # NOTE: Prevent in source builds (can't build in src/ or in project root)

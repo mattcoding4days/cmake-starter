@@ -20,7 +20,7 @@ set(APP_TEST_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/tests")
 #
 # NOTE: add additional project options
 #
-option(STARTER_BUILD_APP_TESTING "Enable Test builds" OFF)
+option(STARTER_BUILD_APP_TESTING "Enable Test builds" ON)
 
 #
 # NOTE: Prevent in source builds (can't build in src/ or in project root)

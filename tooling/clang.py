@@ -18,7 +18,8 @@ class Clang:
         self.cxx_formatter_flags = settings.CMAKE_PROGRAMS["CLANG_FORMATTER"]["flags"]
         self.cmake_formatter = settings.CMAKE_PROGRAMS["CMAKE_FORMATTER"]["name"]
         self.cmake_formatter_flags = settings.CMAKE_PROGRAMS["CMAKE_FORMATTER"]["flags"]
-        self.linter = settings.CMAKE_PROGRAMS["CLANG_ANALYZER"]
+        self.linter = settings.CMAKE_PROGRAMS["CLANG_ANALYZER"]["name"]
+        self.linter_flags = settings.CMAKE_PROGRAMS["CLANG_ANALYZER"]["flags"]
 
         # gather all cpp/hpp files for all projects
         self.source_files: List[Path] = []
@@ -41,22 +42,33 @@ class Clang:
         @desc Run clang format on all the files found in self.files
         """
         # gather all the cmake files
-        Log.info("Formatting CXX files...")
+        Log.info(f"Formatting all files")
         for file in self.source_files:
-            self.shell.execute(f"{self.cxx_formatter} -i {file}")
+            if file in settings.IGNORE:
+                Log.warn(f"Ignoring {file}")
+                continue
+            self.shell.execute(f"{self.cxx_formatter} {self.cxx_formatter_flags} {file}")
 
-        Log.complete(f"Done..\n")
-        Log.info("Formatting CmakeLists files...")
+        print()
         for file in self.cmake_files:
-            self.shell.execute(f"{self.cmake_formatter} -i {file}")
-
-        Log.complete(f"Done..")
+            if file in settings.IGNORE:
+                Log.warn(f"Ignoring {file}")
+                continue
+            self.shell.execute(f"{self.cmake_formatter} {self.cmake_formatter_flags} {file}")
 
     def lint(self):
         """
         @desc
         """
+        Log.info(f"Statically analyzing all files")
+        files = ""
         for file in self.source_files:
-            Log.info(f"Linting -> {file}")
+            if file in settings.IGNORE:
+                Log.warn(f"Ignoring {file}")
+                continue
+            files += f"{file} "
+        self.shell.execute(f"{self.linter} {self.linter_flags} {files}")
 
-        Log.complete(f"Linting complete..")
+
+
+

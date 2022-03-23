@@ -22,13 +22,13 @@ class Packager:
                 f"Build directory {build_dir} does not exist, aborting...")
 
         self.shell = Shell()
-        self.backend = PACKAGE_CONFIG["backend"]
+        self.backend = PACKAGE_CONFIG["BACKEND"]
         if not self.shell.is_installed(self.backend):
             raise Exception(
                 f"The packaging backend [{self.backend}] was not found on the system, please install and try again")
         self.license = PACKAGE_CONFIG["LICENSE"]
         self.maintainer = PACKAGE_CONFIG["MAINTAINER"]
-        self.requires= PACKAGE_CONFIG["REQUIRES"]
+        self.requires = PACKAGE_CONFIG["REQUIRES"]
         self.release = PACKAGE_CONFIG["RELEASE"]
         self.build_dir = build_dir
         self.name: str = pkg_name
@@ -36,8 +36,8 @@ class Packager:
         self.type: str = pkg_type
 
         if not self.__configure_build_env():
-            Log.error(f"{self.pkg_build_dir} is an invalid build directory")
-        Log.info(f"Build directory resolved => {self.pkg_build_dir}")
+            Log.error(f"{self.build_dir} is an invalid build directory")
+        Log.info(f"Build directory resolved => {self.build_dir}")
 
     def __configure_build_env(self) -> bool:
         """
@@ -46,14 +46,14 @@ class Packager:
         """
         # first check if the passed directory is correct
         found = False
-        if "build" in self.pkg_build_dir.stem:
+        if "build" in self.build_dir.stem:
             found = True
         else:
             # the stem directory is not build, but it maybe up one more directory
-            for receptacle in self.pkg_build_dir.iterdir():
+            for receptacle in self.build_dir.iterdir():
                 if receptacle.is_dir():
                     if "build" in receptacle.stem:
-                        self.pkg_build_dir = receptacle
+                        self.build_dir = receptacle
                         found = True
         return found
 

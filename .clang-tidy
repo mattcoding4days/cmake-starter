@@ -2,7 +2,6 @@
 Checks: "*,
         -abseil-*,
         -altera-*,
-        -android-*,
         -fuchsia-*,
         -google-*,
         -llvm*,
