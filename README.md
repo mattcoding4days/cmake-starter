@@ -89,7 +89,7 @@ The clang toolchain and gnu toolchain can have different names
 on different distros depending on how you choose to install it,
 for example maybe you want to install and use the latest version of `clang-format`,
 the program maybe called `clang-format-13`, for this reason `devkit` as a settings file
-used for conifiguration.
+used for configuration.
 
 > To modify the cmake toolchain options, open the `tooling/settings.py` file
 > and edit the `CMAKE_PROGRAMS` dictionary.
