@@ -17,7 +17,7 @@ from tooling.packager import Packager
 from tooling.utils import Log, Shell
 
 
-def preflight():
+def preflight() -> None:
     """
     @desc run some preflight checks to make sure devkit won't run into issues
     """

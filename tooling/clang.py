@@ -44,14 +44,14 @@ class Clang:
         # gather all the cmake files
         Log.info(f"Formatting all files")
         for file in self.source_files:
-            if file in settings.IGNORE:
+            if file in settings.FORMAT_IGNORE:
                 Log.warn(f"Ignoring {file}")
                 continue
             self.shell.execute(f"{self.cxx_formatter} {self.cxx_formatter_flags} {file}")
 
         print()
         for file in self.cmake_files:
-            if file in settings.IGNORE:
+            if file in settings.FORMAT_IGNORE:
                 Log.warn(f"Ignoring {file}")
                 continue
             self.shell.execute(f"{self.cmake_formatter} {self.cmake_formatter_flags} {file}")
@@ -63,12 +63,8 @@ class Clang:
         Log.info(f"Statically analyzing all files")
         files = ""
         for file in self.source_files:
-            if file in settings.IGNORE:
+            if file in settings.ANALYZE_IGNORE:
                 Log.warn(f"Ignoring {file}")
                 continue
             files += f"{file} "
         self.shell.execute(f"{self.linter} {self.linter_flags} {files}")
-
-
-
-

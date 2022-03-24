@@ -36,7 +36,7 @@ PACKAGE_CONFIG: Dict[str, str] = {
 CMAKE_PROGRAMS: Dict[str, Any] = {
     # customize formatting and clang tidy through the flags
     "CLANG_FORMATTER": {
-        "name": "clang-format",
+        "name": "clang-format-13",
         "flags": "-i"
     },
     "CMAKE_FORMATTER": {
@@ -54,8 +54,14 @@ CMAKE_PROGRAMS: Dict[str, Any] = {
     "GNU_C_COMPILER": "gcc"
 }
 
-# Files that should be ignored
-IGNORE: List[Path] = [
+# Files that should be ignored for formatting (clang-format, cmake-format)
+FORMAT_IGNORE: List[Path] = [
     PROJECT_ROOT / 'app' / 'src' / 'example_file.cpp',
     PROJECT_ROOT / 'app' / 'src' / 'some_other_file.cpp'
+]
+
+# Files that should be ignored for clang-tidy
+ANALYZE_IGNORE: List[Path] = [
+    PROJECT_ROOT / 'app' / 'tests' / 'hello_test.cpp',
+    PROJECT_ROOT / 'core' / 'tests' / 'add_test.cpp'
 ]

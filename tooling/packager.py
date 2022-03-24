@@ -4,6 +4,7 @@ Uses checkinstall as a backend to create a debian package.
 
 # standard lib
 from pathlib import Path
+import os
 
 # local package
 from tooling.settings import PACKAGE_CONFIG
@@ -20,6 +21,11 @@ class Packager:
         if not build_dir.exists():
             raise Exception(
                 f"Build directory {build_dir} does not exist, aborting...")
+        # HACK workaround for docker container, as the $USER env variable is not defined
+        self.sudo = ""
+        user = os.getenv("USER")
+        if user and user != "root":
+            self.sudo = "sudo"
 
         self.shell = Shell()
         self.backend = PACKAGE_CONFIG["BACKEND"]
@@ -62,7 +68,7 @@ class Packager:
         @description: build the package with parameters that were fed to us
         """
         self.shell.execute(
-            f"cd {str(self.build_dir)} && sudo {self.backend} -y --pkgname={self.name} --pkgrelease={self.release}"
+            f"cd {str(self.build_dir)} && {self.sudo} {self.backend} -y --pkgname={self.name} --pkgrelease={self.release}"
             f" --pkgversion={self.version} --pkglicense={self.license} --requires={self.requires}"
-            f" --maintainer={self.maintainer} --type={self.type} --install=yes"
+            f" --maintainer={self.maintainer} --type={self.type} --install=no"
         )
