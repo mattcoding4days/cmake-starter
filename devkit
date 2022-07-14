@@ -47,11 +47,11 @@ def main() -> int:
 
         cli = Cli()
 
-        if cli.active_command == "package":
+        if cli.subcommand_package:
             packager = Packager(Path(cli.args.build_dir),
                                 cli.args.name, cli.args.version, cli.args.type)
             packager.build_pkg()
-        elif cli.active_command == "clang":
+        elif cli.subcommand_clang:
             clang = Clang(settings.CMAKE_PROGRAMS["CLANG_FORMATTER"],
                           settings.CMAKE_PROGRAMS["CMAKE_FORMATTER"],
                           settings.CMAKE_PROGRAMS["CLANG_ANALYZER"])
@@ -59,7 +59,7 @@ def main() -> int:
                 clang.format()
             if cli.args.lint:
                 clang.lint()
-        elif cli.active_command == "compile":
+        elif cli.subcommand_compile:
             cmake: str = settings.CMAKE_PROGRAMS["CMAKE"]["name"]
             cxx_compiler: str = ""
             c_compiler: str = ""

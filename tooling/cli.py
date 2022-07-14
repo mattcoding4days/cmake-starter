@@ -86,11 +86,25 @@ class Cli:
         self.__args = parser.parse_args()
 
     @property
-    def active_command(self) -> str:
+    def subcommand_package(self) -> bool:
         """
-        @description: Return the active comamnd object
+        @description Return true if the package command was used
         """
-        return str(self.__args.command)
+        return str(self.__args.command) == "package"
+
+    @property
+    def subcommand_clang(self) -> bool:
+        """
+        @description Return true if the clang command was used
+        """
+        return str(self.__args.command) == "clang"
+
+    @property
+    def subcommand_compile(self) -> bool:
+        """
+        @description Return true if the compile command was used
+        """
+        return str(self.__args.command) == "compile"
 
     @property
     def args(self) -> argparse.Namespace:

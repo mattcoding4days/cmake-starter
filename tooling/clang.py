@@ -19,7 +19,7 @@ class Clang:
         self._cmake_formatter: str = cmake_formatter["name"]
         self._cmake_formatter_flags: str = cmake_formatter["flags"]
         self._linter: str = linter["name"]
-        self._linter_flags: str = linter["name"]
+        self._linter_flags: str = linter["flags"]
 
         # gather all cpp/hpp files for all projects
         self._source_files: List[Path] = []
@@ -31,7 +31,7 @@ class Clang:
             for hpp in project.rglob("**/*.hpp"):
                 self._source_files.append(hpp)
             for cmake in project.rglob("**/*.txt"):
-                # Possible bug here, as regular text files
+                # BUG: Possible bug here, as regular text files
                 # could be mistaken for CMakeLists.txt files.
                 # it shouldn't actually break anything, but rather
                 # give an unwanted outcome
