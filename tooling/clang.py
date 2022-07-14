@@ -4,7 +4,7 @@ Wrap up clang tooling functionality
 
 # standard lib
 from pathlib import Path
-from typing import List
+from typing import List, Dict
 
 # local package
 from tooling import settings
@@ -12,14 +12,14 @@ from tooling.utils import Log, Shell
 
 
 class Clang:
-    def __init__(self):
+    def __init__(self, cxx_formatter: Dict[str, str], cmake_formatter: Dict[str, str], linter: Dict[str, str]):
         self._shell = Shell()
-        self._cxx_formatter = settings.CMAKE_PROGRAMS["CLANG_FORMATTER"]["name"]
-        self._cxx_formatter_flags = settings.CMAKE_PROGRAMS["CLANG_FORMATTER"]["flags"]
-        self._cmake_formatter = settings.CMAKE_PROGRAMS["CMAKE_FORMATTER"]["name"]
-        self._cmake_formatter_flags = settings.CMAKE_PROGRAMS["CMAKE_FORMATTER"]["flags"]
-        self._linter = settings.CMAKE_PROGRAMS["CLANG_ANALYZER"]["name"]
-        self._linter_flags = settings.CMAKE_PROGRAMS["CLANG_ANALYZER"]["flags"]
+        self._cxx_formatter: str = cxx_formatter["name"]
+        self._cxx_formatter_flags: str = cxx_formatter["flags"]
+        self._cmake_formatter: str = cmake_formatter["name"]
+        self._cmake_formatter_flags: str = cmake_formatter["flags"]
+        self._linter: str = linter["name"]
+        self._linter_flags: str = linter["name"]
 
         # gather all cpp/hpp files for all projects
         self._source_files: List[Path] = []
@@ -40,6 +40,7 @@ class Clang:
     def format(self):
         """
         @desc Run clang format on all the files found in self.files
+        @raises Exception if name values are None or Empty
         """
         # gather all the cmake files
         Log.info(f"Formatting all files")

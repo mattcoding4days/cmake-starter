@@ -94,7 +94,13 @@ used for configuration.
 > and edit the `CMAKE_PROGRAMS` dictionary.
 
 ```python
-CMAKE_PROGRAMS: Dict[str, Any] = {
+CMAKE_PROGRAMS: Dict[str, Dict[str, str]] = {
+    # cmake is here incase a different version is being used,
+    # using flags should not be necessary
+    "CMAKE": {
+        "name": "cmake",
+        "flags": "",
+    },
     # customize formatting and clang tidy through the flags
     "CLANG_FORMATTER": {
         "name": "clang-format",
@@ -108,11 +114,23 @@ CMAKE_PROGRAMS: Dict[str, Any] = {
         "name": "clang-tidy",
         "flags": f"-p {PROJECT_BUILD_DIR} --config-file={PROJECT_ROOT / '.clang-tidy'}"
     },
-    # modify your compiler versions here
-    "CLANG_CXX_COMPILER": "clang++",
-    "CLANG_C_COMPILER": "clang",
-    "GNU_CXX_COMPILER": "g++",
-    "GNU_C_COMPILER": "gcc"
+    # modify your compiler versions here, flags should not be necessary
+    "CLANG_CXX_COMPILER": {
+        "name": "clang++",
+        "flags": "",
+    },
+    "CLANG_C_COMPILER": {
+        "name": "clang",
+        "flags": "",
+    },
+    "GNU_CXX_COMPILER": {
+        "name": "g++",
+        "flags": "",
+    },
+    "GNU_C_COMPILER": {
+        "name": "gcc",
+        "flags": "",
+    }
 }
 ```
 
@@ -120,12 +138,11 @@ CMAKE_PROGRAMS: Dict[str, Any] = {
 > and edit the `PACKAGE_CONFIG` dictionary.
 
 ```python
-
 PACKAGE_CONFIG: Dict[str, str] = {
     "BACKEND": "checkinstall",
-    "LICENSE": "MIT",
+    "LICENSE": "GPL-3.0",
     "MAINTAINER": "mattcoding4days",
-    "REQUIRES": "libssl-dev",
+    "REQUIRES": "",
     "RELEASE": f"{distro.codename()}-{distro.version()}"
 }
 ```

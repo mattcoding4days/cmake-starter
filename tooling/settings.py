@@ -3,7 +3,7 @@ Application wide settings are here
 """
 
 from pathlib import Path
-from typing import Dict, List, Any
+from typing import Dict, List
 
 import distro
 
@@ -23,9 +23,9 @@ PROJECTS: List[Path] = [
 # change your information accordingly
 PACKAGE_CONFIG: Dict[str, str] = {
     "BACKEND": "checkinstall",
-    "LICENSE": "MIT",
+    "LICENSE": "GPL-3.0",
     "MAINTAINER": "mattcoding4days",
-    "REQUIRES": "libssl-dev",
+    "REQUIRES": "",
     "RELEASE": f"{distro.codename()}-{distro.version()}"
 }
 
@@ -33,10 +33,16 @@ PACKAGE_CONFIG: Dict[str, str] = {
 
 # Expected programs, here compilers are specified so different versions
 # can easily be swapped in and out by editing this file
-CMAKE_PROGRAMS: Dict[str, Any] = {
+CMAKE_PROGRAMS: Dict[str, Dict[str, str]] = {
+    # cmake is here incase a different version is being used,
+    # using flags should not be necessary
+    "CMAKE": {
+        "name": "cmake",
+        "flags": "",
+    },
     # customize formatting and clang tidy through the flags
     "CLANG_FORMATTER": {
-        "name": "clang-format-13",
+        "name": "clang-format",
         "flags": "-i"
     },
     "CMAKE_FORMATTER": {
@@ -44,14 +50,26 @@ CMAKE_PROGRAMS: Dict[str, Any] = {
         "flags": "-i"
     },
     "CLANG_ANALYZER": {
-        "name": "clang-tidy-13",
+        "name": "clang-tidy",
         "flags": f"-p {PROJECT_BUILD_DIR} --config-file={PROJECT_ROOT / '.clang-tidy'}"
     },
-    # modify your compiler versions here
-    "CLANG_CXX_COMPILER": "clang++-13",
-    "CLANG_C_COMPILER": "clang-13",
-    "GNU_CXX_COMPILER": "g++",
-    "GNU_C_COMPILER": "gcc"
+    # modify your compiler versions here, flags should not be necessary
+    "CLANG_CXX_COMPILER": {
+        "name": "clang++",
+        "flags": "",
+    },
+    "CLANG_C_COMPILER": {
+        "name": "clang",
+        "flags": "",
+    },
+    "GNU_CXX_COMPILER": {
+        "name": "g++",
+        "flags": "",
+    },
+    "GNU_C_COMPILER": {
+        "name": "gcc",
+        "flags": "",
+    }
 }
 
 # Files that should be ignored for formatting (clang-format, cmake-format)

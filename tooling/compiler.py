@@ -12,25 +12,26 @@ class Compiler:
     its mostly just to make command line compiling a bit easier and less cumbersome
     """
 
-    def __init__(self, cxx_compiler: str, c_compiler: str):
-        self.shell = Shell()
-        self.cpus: str = self.shell.execute_with_output("nproc")
-        self.cxx_compiler = cxx_compiler
-        self.c_compiler = c_compiler
+    def __init__(self, cmake: str, cxx_compiler: str, c_compiler: str):
+        self._shell = Shell()
+        self._cpus: str = self._shell.execute_with_output("nproc")
+        self._cmake: str = cmake
+        self._cxx_compiler: str = cxx_compiler
+        self._c_compiler: str = c_compiler
 
     def __init_build(self) -> bool:
         """
         @desc
         @return True if the command succeeds, False if otherwise
         """
-        return self.shell.execute(
-            f"cmake -B {settings.PROJECT_BUILD_DIR.stem} -D CMAKE_CXX_COMPILER={self.cxx_compiler} -D CMAKE_C_COMPILER={self.c_compiler}")
+        return self._shell.execute(
+            f"{self._cmake} -B {settings.PROJECT_BUILD_DIR.stem} -D CMAKE_CXX_COMPILER={self._cxx_compiler} -D CMAKE_C_COMPILER={self._c_compiler}")
 
     def __make(self) -> bool:
         """
         @desc compile the compared build
         """
-        return self.shell.execute(f"cmake --build {settings.PROJECT_BUILD_DIR.stem} -- -j{self.cpus}")
+        return self._shell.execute(f"{self._cmake} --build {settings.PROJECT_BUILD_DIR.stem} -- -j{self._cpus}")
 
     def compile(self) -> bool:
         """

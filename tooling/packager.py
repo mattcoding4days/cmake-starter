@@ -22,28 +22,28 @@ class Packager:
             raise Exception(
                 f"Build directory {build_dir} does not exist, aborting...")
         # HACK workaround for docker container, as the $USER env variable is not defined
-        self.sudo = ""
+        self._sudo = ""
         user = os.getenv("USER")
         if user and user != "root":
-            self.sudo = "sudo"
+            self._sudo = "sudo"
 
-        self.shell = Shell()
-        self.backend = PACKAGE_CONFIG["BACKEND"]
-        if not self.shell.is_installed(self.backend):
+        self._shell = Shell()
+        self._backend = PACKAGE_CONFIG["BACKEND"]
+        if not self._shell.is_installed(self._backend):
             raise Exception(
-                f"The packaging backend [{self.backend}] was not found on the system, please install and try again")
-        self.license = PACKAGE_CONFIG["LICENSE"]
-        self.maintainer = PACKAGE_CONFIG["MAINTAINER"]
-        self.requires = PACKAGE_CONFIG["REQUIRES"]
-        self.release = PACKAGE_CONFIG["RELEASE"]
-        self.build_dir = build_dir
-        self.name: str = pkg_name
-        self.version: str = pkg_version
-        self.type: str = pkg_type
+                f"The packaging backend [{self._backend}] was not found on the system, please install and try again")
+        self._license = PACKAGE_CONFIG["LICENSE"]
+        self._maintainer = PACKAGE_CONFIG["MAINTAINER"]
+        self._requires = PACKAGE_CONFIG["REQUIRES"]
+        self._release = PACKAGE_CONFIG["RELEASE"]
+        self._build_dir = build_dir
+        self._name: str = pkg_name
+        self._version: str = pkg_version
+        self._type: str = pkg_type
 
         if not self.__configure_build_env():
-            Log.error(f"{self.build_dir} is an invalid build directory")
-        Log.info(f"Build directory resolved => {self.build_dir}")
+            Log.error(f"{self._build_dir} is an invalid build directory")
+        Log.info(f"Build directory resolved => {self._build_dir}")
 
     def __configure_build_env(self) -> bool:
         """
@@ -52,14 +52,14 @@ class Packager:
         """
         # first check if the passed directory is correct
         found = False
-        if "build" in self.build_dir.stem:
+        if "build" in self._build_dir.stem:
             found = True
         else:
             # the stem directory is not build, but it maybe up one more directory
-            for receptacle in self.build_dir.iterdir():
+            for receptacle in self._build_dir.iterdir():
                 if receptacle.is_dir():
                     if "build" in receptacle.stem:
-                        self.build_dir = receptacle
+                        self._build_dir = receptacle
                         found = True
         return found
 
@@ -67,8 +67,8 @@ class Packager:
         """
         @description: build the package with parameters that were fed to us
         """
-        self.shell.execute(
-            f"cd {str(self.build_dir)} && {self.sudo} {self.backend} -y --pkgname={self.name} --pkgrelease={self.release}"
-            f" --pkgversion={self.version} --pkglicense={self.license} --requires={self.requires}"
-            f" --maintainer={self.maintainer} --type={self.type} --install=no"
+        self._shell.execute(
+            f"cd {str(self._build_dir)} && {self._sudo} {self._backend} -y --pkgname={self._name} --pkgrelease={self._release}"
+            f" --pkgversion={self._version} --pkglicense={self._license} --requires={self._requires}"
+            f" --maintainer={self._maintainer} --type={self._type} --install=no"
         )

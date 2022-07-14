@@ -22,21 +22,20 @@ def preflight() -> None:
     @desc run some preflight checks to make sure devkit won't run into issues
     """
     # make sure we are running linux, because what else would you run?
-    if "linux" not in sys.platform:
+    if "linux" != sys.platform:
         raise Exception(f"{sys.platform} is currently not supported\n")
 
     shell = Shell()
     # verify that all the required programs are installed on the system
     for key, value in settings.CMAKE_PROGRAMS.items():
-        if isinstance(value, str):
-            if not shell.is_installed(value):
-                raise Exception(
-                    f"{value} was not found on the system, please install, or change the value of {key} in the tooling/settings.py file")
-        else:
-            program_name = value["name"]
+        program_name = value["name"]
+        if program_name:
             if not shell.is_installed(program_name):
                 raise Exception(
                     f"{program_name} was not found on the system, please install, or change the value of {key} in the tooling/settings.py file")
+        else:
+            raise Exception(
+                f"Value for {key} is empty, please edit the value in tooling/settings.py file")
 
 
 def main() -> int:
@@ -53,29 +52,34 @@ def main() -> int:
                                 cli.args.name, cli.args.version, cli.args.type)
             packager.build_pkg()
         elif cli.active_command == "clang":
-            clang = Clang()
+            clang = Clang(settings.CMAKE_PROGRAMS["CLANG_FORMATTER"],
+                          settings.CMAKE_PROGRAMS["CMAKE_FORMATTER"],
+                          settings.CMAKE_PROGRAMS["CLANG_ANALYZER"])
             if cli.args.format:
                 clang.format()
             if cli.args.lint:
                 clang.lint()
         elif cli.active_command == "compile":
-            cxx_compiler = ""
-            c_compiler = ""
+            cmake: str = settings.CMAKE_PROGRAMS["CMAKE"]["name"]
+            cxx_compiler: str = ""
+            c_compiler: str = ""
             if cli.args.clang:
-                cxx_compiler = settings.CMAKE_PROGRAMS["CLANG_CXX_COMPILER"]
-                c_compiler = settings.CMAKE_PROGRAMS["CLANG_C_COMPILER"]
+                cxx_compiler = settings.CMAKE_PROGRAMS["CLANG_CXX_COMPILER"]["name"]
+                c_compiler = settings.CMAKE_PROGRAMS["CLANG_C_COMPILER"]["name"]
             if cli.args.gnu:
-                cxx_compiler = settings.CMAKE_PROGRAMS["GNU_CXX_COMPILER"]
-                c_compiler = settings.CMAKE_PROGRAMS["GNU_C_COMPILER"]
-            compiler = Compiler(cxx_compiler, c_compiler)
+                cxx_compiler = settings.CMAKE_PROGRAMS["GNU_CXX_COMPILER"]["name"]
+                c_compiler = settings.CMAKE_PROGRAMS["GNU_C_COMPILER"]["name"]
+            compiler = Compiler(cmake, cxx_compiler, c_compiler)
             if not compiler.compile():
                 return 1
         else:
             Log.warn("No arguments were given, please run devkit --help")
             return 1
-
     except Exception as e:
         Log.error(f"{e}")
+        return 1
+    except KeyboardInterrupt:
+        Log.warn("Ctrl + c requested..")
         return 1
 
     Log.complete("Done..")
@@ -83,4 +87,4 @@ def main() -> int:
 
 
 if __name__ == "__main__":
-    exit(main())
+    sys.exit(main())
