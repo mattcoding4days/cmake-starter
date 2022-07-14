@@ -1,5 +1,5 @@
 # using ubuntu base image
-FROM ubuntu:20.04
+FROM ubuntu:22.04
 
 # Use default  answers for all questions.
 ENV DEBIAN_FRONTEND noninteractive
@@ -10,18 +10,14 @@ RUN apt-get update && apt-get upgrade -y --allow-downgrades
 # install basics
 RUN apt-get -y install lsb-release wget software-properties-common
 
-# Install compilers and all tooling
+# Install generlized tooling
 RUN apt-get -y install cmake build-essential python3-pip checkinstall vim git
 
-# Install LLVM 13 (clang toolchain)
-RUN wget https://apt.llvm.org/llvm.sh && \
-    chmod +x llvm.sh && \
-    ./llvm.sh 13
+# Install LLVM (clang toolchain) and formatters
+RUN apt-get -y install clang clang-format clang-tidy cmake-format
 
-RUN apt-get -y install clang-format-13 clang-tidy-13
-
-# Install cmake-format with pip
-RUN pip install cmake-format distro
+# Install with pip
+RUN pip install  distro
 
 # Copy the files to the image
 COPY cmake/ /starter/cmake

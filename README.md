@@ -41,7 +41,6 @@
 1. `cmake -B build` Generate the make files, fetch build dependencies
 2. `cmake --build build -j$(nproc)` Compile the code
 
-
 ### Using the `devkit` tool
 
 `devkit` is a collection of python modules that perform common tasks
@@ -98,7 +97,7 @@ used for configuration.
 CMAKE_PROGRAMS: Dict[str, Any] = {
     # customize formatting and clang tidy through the flags
     "CLANG_FORMATTER": {
-        "name": "clang-format-13",
+        "name": "clang-format",
         "flags": "-i"
     },
     "CMAKE_FORMATTER": {
@@ -106,12 +105,12 @@ CMAKE_PROGRAMS: Dict[str, Any] = {
         "flags": "-i"
     },
     "CLANG_ANALYZER": {
-        "name": "clang-tidy-13",
+        "name": "clang-tidy",
         "flags": f"-p {PROJECT_BUILD_DIR} --config-file={PROJECT_ROOT / '.clang-tidy'}"
     },
     # modify your compiler versions here
-    "CLANG_CXX_COMPILER": "clang++-13",
-    "CLANG_C_COMPILER": "clang-13",
+    "CLANG_CXX_COMPILER": "clang++",
+    "CLANG_C_COMPILER": "clang",
     "GNU_CXX_COMPILER": "g++",
     "GNU_C_COMPILER": "gcc"
 }
